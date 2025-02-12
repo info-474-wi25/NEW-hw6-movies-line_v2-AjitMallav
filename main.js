@@ -19,7 +19,7 @@ d3.csv("movies.csv").then(data => {
     });
  
     // Check your work
-    // console.log(data);
+    console.log(data);
 
     /* ===================== LINE CHART ===================== */
 
@@ -62,7 +62,7 @@ d3.csv("movies.csv").then(data => {
         .y(d => yGross(d.gross));
 
     // 5: PLOT LINE
-    svgLine.append(".line")
+    svgLine.append("path")
         .datum(lineData)
         .attr("d", line)
         .attr("stroke", "steelblue")
@@ -72,19 +72,41 @@ d3.csv("movies.csv").then(data => {
 
     // 6: ADD AXES FOR LINE CHART
     // 6.a: X-axis (Year)
-
+    svgLine.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(xYear)
+            .tickFormat(d3.format("d"))
+        );
 
     // 6.b: Y-axis (Gross)
-
+    svgLine.append("g")
+        .call(d3.axisLeft(yGross)
+            .tickFormat(d => d / 1000000000 + "B")
+        );
 
     // 7: ADD LABELS FOR LINE CHART
     // 7.a: Chart Title
-
+    svgLine.append("text")
+        .attr("class", "title")
+        .attr("x", width / 2)
+        .attr("y", -margin.top / 2)
+        .text("Trends in Gross Movie Revenue over Time");
 
     // 7.b: X-axis label (Year)
-
-
+    svgLine.append("text")
+        .attr("class", "axis-label")
+        .attr("text-anchor", "middle")
+        .attr("x", width / 2)
+        .attr("y", height + (margin.bottom / 2))
+        .text("Year");
+        
     // 7.c: Y-axis label (Total Gross)
+    svgLine.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left / 2)
+        .attr("x", -height / 2)
+        .text("Total Gross (Billion $)");
 
     // 7.c: Y-axis label (Average IMDb Score)
 
